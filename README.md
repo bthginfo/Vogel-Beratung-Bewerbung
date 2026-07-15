@@ -9,7 +9,12 @@ npm install
 npm run dev
 ```
 
-Die Startseite liegt unter `/`, der druckoptimierte Lebenslauf unter `/cv`.
+Die Startseite liegt unter `/`, der druckoptimierte Lebenslauf unter `/cv` und das einseitige Anschreiben unter `/anschreiben`.
+
+Direkte Dokumente:
+
+- `/documents/Mario_Schubert_CV_Vogel.pdf`
+- `/documents/Mario_Schubert_Anschreiben_Vogel.pdf`
 
 ## Qualitätssicherung
 
@@ -19,7 +24,7 @@ npm run build
 npm run preview
 ```
 
-Die Seite ist für Desktop, Tablet und Mobile optimiert. Autoplay wird bei `prefers-reduced-motion` deaktiviert; das Hero-Video kann immer manuell abgespielt oder pausiert werden.
+Die Seite ist für Desktop, Tablet und Mobile optimiert. Autoplay wird bei `prefers-reduced-motion` deaktiviert; das Hero-Video kann immer manuell abgespielt oder pausiert werden. Der Filmindex lädt ausschließlich lokale Vorschaubilder. YouTube-/Drive-Player werden erst nach einer expliziten Auswahl in den zugänglichen Dialog eingesetzt und beim Schließen wieder vollständig entfernt.
 
 ## Deployment auf Vercel
 
@@ -27,7 +32,7 @@ Das Repository kann direkt als Vite-Projekt importiert werden. `vercel.json` lei
 
 ## Mediennachweis
 
-Die verwendeten Portfolio-Fotos und der Markenfilm stammen von Marios eigener WYLDWORKS-Website und wurden ausschließlich für diese Bewerbung lokal eingebunden. Es werden keine externen Bilddienste oder Hotlinks verwendet.
+Die verwendeten Portfolio-Fotos, Filmvorschaubilder und der Markenfilm stammen von Marios eigener WYLDWORKS-Website beziehungsweise seiner kuratierten Arbeitsauswahl und wurden ausschließlich für diese Bewerbung lokal eingebunden. Es werden keine externen Bilddienste oder Bild-Hotlinks verwendet. Externe Video-Player werden aus Performance- und Datenschutzgründen erst nach Klick geladen; YouTube verwendet `youtube-nocookie.com`.
 
 ## Kontakt
 
