@@ -32,17 +32,25 @@ function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
   const [time, setTime] = useState('00:00:00')
-  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [reduce] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  const [loadVideo, setLoadVideo] = useState(() => !reduce)
+  const [playRequested, setPlayRequested] = useState(false)
 
   useEffect(() => {
     const v = videoRef.current
-    if (!v || reduce) return
+    if (!v || !loadVideo || (reduce && !playRequested)) return
+    v.load()
     v.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
-  }, [reduce])
+  }, [loadVideo, playRequested, reduce])
 
   const toggle = () => {
     const v = videoRef.current
     if (!v) return
+    if (!loadVideo) {
+      setPlayRequested(true)
+      setLoadVideo(true)
+      return
+    }
     if (v.paused) v.play().then(() => setPlaying(true))
     else { v.pause(); setPlaying(false) }
   }
@@ -56,10 +64,10 @@ function HeroVideo() {
   }
 
   return <div className="hero-media">
-    <video ref={videoRef} muted loop playsInline preload="metadata" poster="/media/griesmueller-poster.jpg" onTimeUpdate={updateTime} aria-label="Ausschnitt aus einem WYLDWORKS Markenfilm für die Stadtbrauerei Griesmüller">
-      <source src="/media/griesmueller.mp4" type="video/mp4" />
+    <video ref={videoRef} muted loop playsInline preload={loadVideo ? 'metadata' : 'none'} poster="/media/gruber-hero-poster.jpg" onTimeUpdate={updateTime} aria-label="Architektur-Skizzen aus dem WYLDWORKS Markenfilm GRUBER.HAUS · Jungle Hut by Matteo Thun">
+      {loadVideo && <source src="/media/gruber-hero.mp4" type="video/mp4" />}
     </video>
-    <div className="video-meta"><span>WYLDWORKS / BRAND FILM</span><span>{time}</span></div>
+    <div className="video-meta"><span>GRUBER.HAUS / BRAND FILM</span><span>{time}</span></div>
     <button className="play" type="button" onClick={toggle} aria-label={playing ? 'Video pausieren' : 'Video abspielen'}>{playing ? 'Ⅱ' : '▶'}<span>{playing ? 'Pause' : 'Play'}</span></button>
     <div className={`playhead ${playing ? 'running' : ''}`} aria-hidden="true"><i /></div>
   </div>
@@ -144,7 +152,7 @@ function Home() {
         <h1 className="reveal delay-1">Serienfähig.<br /><em>Ohne serienmäßig</em><br />auszusehen.</h1>
         <div className="hero-grid reveal delay-2">
           <div className="hero-intro">
-            <p>Servus Vogel. Ich bin Mario Schubert – Bildgestalter, Produzent und UX-Denker aus Ingolstadt.</p>
+            <p>Liebes Vogel-Team, ich bin Mario Schubert – Bildgestalter, Produzent und UX-Denker aus Ingolstadt.</p>
             <p>Ich verbinde Idee, Kamera, Post und System. Damit aus guten Einzelstücken eine Bildsprache wird.</p>
             <div className="hero-actions"><a className="button mint" href="#filme">Filme ansehen ↓</a><a className="text-link" href="mailto:servus@marioschub.com">Direkt sprechen ↗</a></div>
           </div>
@@ -174,8 +182,8 @@ function Home() {
           <div className="case-copy"><span>Markenfilm / Mittelstand</span><h3>Griesmüller<br />Stadtbrauerei</h3><p>Ein Film über das, was eine lokale Marke trägt: Menschen, Handgriffe und ein Ort mit Haltung.</p><strong>WYLDWORKS Produktion</strong></div>
         </article>
         <div className="case-pair">
-          <article className="case"><div className="case-visual portrait"><img src="/media/feig-doka.jpg" alt="Gerüstbauer bei der Montage auf der Bauma" /><span className="frame-mark">02 / 03</span></div><div className="case-copy"><span>Event & Produkt</span><h3>Feig Gerüste × Doka</h3><p>Arbeit in Bewegung, verdichtet auf Hände, Material und den Moment.</p><strong>Fotografie · Bildauswahl · Postproduktion</strong></div></article>
-          <article className="case offset"><div className="case-visual"><img src="/media/maschinenbau.jpg" alt="Schwere Spezialmaschine von Ludwig Bauch auf einem Industrieareal" /><span className="frame-mark">03 / 03</span></div><div className="case-copy"><span>Industrie & Präzision</span><h3>Ludwig Bauch Maschinentechnik</h3><p>Technik bekommt Maßstab, wenn Konstruktion und Umgebung miteinander sprechen.</p><strong>Konzept · Fotografie · Postproduktion</strong></div></article>
+          <article className="case"><div className="case-visual portrait"><img src="/media/feig-doka.jpg" alt="Gerüstbauer bei der Montage auf der Bauma" loading="lazy" /><span className="frame-mark">02 / 03</span></div><div className="case-copy"><span>Event & Produkt</span><h3>Feig Gerüste × Doka</h3><p>Arbeit in Bewegung, verdichtet auf Hände, Material und den Moment.</p><strong>Fotografie · Bildauswahl · Postproduktion</strong></div></article>
+          <article className="case offset"><div className="case-visual"><img src="/media/maschinenbau.jpg" alt="Schwere Spezialmaschine von Ludwig Bauch auf einem Industrieareal" loading="lazy" /><span className="frame-mark">03 / 03</span></div><div className="case-copy"><span>Industrie & Präzision</span><h3>Ludwig Bauch Maschinentechnik</h3><p>Technik bekommt Maßstab, wenn Konstruktion und Umgebung miteinander sprechen.</p><strong>Konzept · Fotografie · Postproduktion</strong></div></article>
         </div>
         <div className="portfolio-links"><a href="#filme">Zum Filmindex ↑</a><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">Mehr auf WYLDWORKS ↗</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com ↗</a></div>
       </section>
@@ -224,7 +232,7 @@ function Home() {
       </section>
 
       <section className="contact section" id="kontakt">
-        <div className="contact-image"><img src="/media/mario-contact.jpg" alt="Porträt von Mario Schubert am Fenster" /></div>
+        <div className="contact-image"><img src="/media/mario-contact.jpg" alt="Porträt von Mario Schubert am Fenster" loading="lazy" /></div>
         <div className="contact-copy"><span>Mario Schubert / Ingolstadt</span><h2>Wenn ihr jemanden sucht, der beim Bild anfängt und beim System nicht aufhört: <em>Lasst uns reden.</em></h2><div className="contact-links"><a href="mailto:servus@marioschub.com">servus@marioschub.com ↗</a><a href="tel:+4915155338029">+49 1515 5338029 ↗</a></div><div className="small-links"><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">WYLDWORKS</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com</a><a href="/cv">CV / Print</a><a href="/anschreiben">Anschreiben</a><a href="/documents/Mario_Schubert_CV_Vogel.pdf" download>CV PDF ↓</a><a href="/documents/Mario_Schubert_Anschreiben_Vogel.pdf" download>Anschreiben PDF ↓</a></div></div>
       </section>
     </main>
@@ -244,7 +252,17 @@ function CV() {
   return <main className="cv-page">
     <div className="cv-controls"><a href="/">← Zur Bewerbung</a><a href="/anschreiben">Anschreiben</a><a className="control-download" href="/documents/Mario_Schubert_CV_Vogel.pdf" download>CV direkt laden ↓</a><button onClick={() => window.print()}>Drucken / eigenes PDF</button></div>
     <header className="cv-header"><div><span>Curriculum Vitae / 07.2026</span><h1>Mario<br />Schubert</h1><p>Bildgestalter · Produzent · UX-Denker</p></div><img src="/media/mario-contact.jpg" alt="Mario Schubert" /></header>
-    <a className="cv-site-link" href="https://mario-schubert-vogel.vercel.app">Digitale Bewerbung, Formate & Filme: <strong>mario-schubert-vogel.vercel.app ↗</strong></a>
+    <a className="cv-site-link" href="https://mario-schubert-vogel.vercel.app">
+      <span className="cv-site-copy">
+        <small>Digitaler Case / Ergänzung zum CV</small>
+        <strong>Bewerbungsseite &amp; Filmreferenzen ansehen</strong>
+        <span>Film-Dossier, Formate und Arbeitsweise</span>
+      </span>
+      <span className="cv-site-address">
+        <span>mario-schubert-vogel.vercel.app</span>
+        <b aria-hidden="true">↗</b>
+      </span>
+    </a>
     <section className="cv-intro"><p>Ich verbinde visuelles Handwerk mit strategischem Denken und der Struktur, die aus einem guten Einzelstück eine verlässliche Serie macht.</p><dl><div><dt>Standort</dt><dd>Ingolstadt</dd></div><div><dt>Geboren</dt><dd>31.12.1995</dd></div><div><dt>Kontakt</dt><dd><a href="mailto:servus@marioschub.com">servus@marioschub.com</a><br /><a href="tel:+4915155338029">+49 1515 5338029</a></dd></div></dl></section>
     <section className="cv-section"><h2>Erfahrung</h2><div className="cv-timeline">{experience.map(([date, role, body]) => <article key={role}><span>{date}</span><div><h3>{role}</h3><p>{body}</p></div></article>)}</div></section>
     <div className="cv-columns">
