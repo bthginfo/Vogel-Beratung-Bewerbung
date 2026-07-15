@@ -185,7 +185,7 @@ function Home() {
           <article className="case"><div className="case-visual portrait"><img src="/media/feig-doka.jpg" alt="Gerüstbauer bei der Montage auf der Bauma" loading="lazy" /><span className="frame-mark">02 / 03</span></div><div className="case-copy"><span>Event & Produkt</span><h3>Feig Gerüste × Doka</h3><p>Arbeit in Bewegung, verdichtet auf Hände, Material und den Moment.</p><strong>Fotografie · Bildauswahl · Postproduktion</strong></div></article>
           <article className="case offset"><div className="case-visual"><img src="/media/maschinenbau.jpg" alt="Schwere Spezialmaschine von Ludwig Bauch auf einem Industrieareal" loading="lazy" /><span className="frame-mark">03 / 03</span></div><div className="case-copy"><span>Industrie & Präzision</span><h3>Ludwig Bauch Maschinentechnik</h3><p>Technik bekommt Maßstab, wenn Konstruktion und Umgebung miteinander sprechen.</p><strong>Konzept · Fotografie · Postproduktion</strong></div></article>
         </div>
-        <div className="portfolio-links"><a href="#filme">Zum Filmindex ↑</a><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">Mehr auf WYLDWORKS ↗</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com ↗</a></div>
+        <div className="portfolio-links"><a href="#filme">Zum Filmindex ↑</a></div>
       </section>
 
       <section className="formats section" id="formate">
@@ -233,7 +233,7 @@ function Home() {
 
       <section className="contact section" id="kontakt">
         <div className="contact-image"><img src="/media/mario-contact.jpg" alt="Porträt von Mario Schubert am Fenster" loading="lazy" /></div>
-        <div className="contact-copy"><span>Mario Schubert / Ingolstadt</span><h2>Wenn ihr jemanden sucht, der beim Bild anfängt und beim System nicht aufhört: <em>Lasst uns reden.</em></h2><div className="contact-links"><a href="mailto:servus@marioschub.com">servus@marioschub.com ↗</a><a href="tel:+4915155338029">+49 1515 5338029 ↗</a></div><div className="small-links"><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">WYLDWORKS</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com</a><a href="/cv">CV / Print</a><a href="/anschreiben">Anschreiben</a><a href="/documents/Mario_Schubert_CV_Vogel.pdf" download>CV PDF ↓</a><a href="/documents/Mario_Schubert_Anschreiben_Vogel.pdf" download>Anschreiben PDF ↓</a></div></div>
+        <div className="contact-copy"><span>Mario Schubert / Ingolstadt</span><h2>Wenn ihr jemanden sucht, der beim Bild anfängt und beim System nicht aufhört: <em>Lasst uns reden.</em></h2><div className="contact-links"><a href="mailto:servus@marioschub.com">servus@marioschub.com ↗</a><a href="tel:+4915155338029">+49 1515 5338029 ↗</a></div><div className="small-links"><a href="/cv">CV / Print</a><a href="/anschreiben">Anschreiben</a><a href="/documents/Mario_Schubert_CV_Vogel.pdf" download>CV PDF ↓</a><a href="/documents/Mario_Schubert_Anschreiben_Vogel.pdf" download>Anschreiben PDF ↓</a></div></div>
       </section>
     </main>
     <footer><span>Mario Schubert × Vogel Beratung</span><span>Application field guide / 07.2026</span><a href="#top">Nach oben ↑</a></footer>
