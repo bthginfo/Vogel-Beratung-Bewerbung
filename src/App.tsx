@@ -16,6 +16,7 @@ const films: Film[] = [
   { title: 'Aston Martin · DBX 707', category: 'Premium Brand · Automotive Film', thumbnail: '/media/videos/aston-dbx.jpg', embed: 'https://drive.google.com/file/d/1rzRF8FGjO8SrPf7tegbeYW7VbBmpbYFn/preview', source: 'Google Drive' },
   { title: 'The Honourables · Golf & Business Cup', category: 'Eventfilm · Business / Lifestyle', thumbnail: '/media/videos/the-honourables.jpg', embed: 'https://drive.google.com/file/d/1LH989Q6MOTSidqQZzisju0qqdQDrAwig/preview', source: 'Google Drive' },
   { title: 'Shi Heng Yi · Shaolin Spirit', category: 'Gespräch · Podcast / Long-form', thumbnail: '/media/videos/shaolin-spirit.jpg', embed: 'https://www.youtube-nocookie.com/embed/vLoTyZ7CVRw', source: 'YouTube' },
+  { title: 'Aston Martin x Hollfelder Juwelier - Aftermovie', category: 'Premium Event · Marke / Lifestyle', thumbnail: '/media/videos/aston-hollfelder.jpg', embed: 'https://www.youtube-nocookie.com/embed/dhZtdIx6FDY', source: 'YouTube' },
 ]
 
 function Header() {
@@ -125,18 +126,17 @@ function VideoLibrary() {
         <span className="film-caption"><small>{film.category}</small><strong>{film.title}</strong></span>
       </button>)}
     </div>
-    <div className="reel-head"><h2>Bewegtbild<br /><em>zuerst.</em></h2><p>Acht Arbeiten zwischen Architektur, Mittelstand, Gespräch, Premium Brand, Event und Menschen. Ein Lead Film – sieben weitere Blickwinkel im Index.</p></div>
+    <div className="reel-head"><h2>Bewegtbild<br /><em>zuerst.</em></h2><p>Neun Arbeiten zwischen Architektur, Mittelstand, Gespräch, Premium Brand, Event und Menschen. Ein Lead Film – acht weitere Perspektiven.</p></div>
     <div className="film-index" aria-label="Weitere ausgewählte Filme">
       {films.slice(1).map((film, i) => <button type="button" key={film.title} onClick={(event) => openFilm(film, event.currentTarget)} aria-label={`${film.title} abspielen`}>
         <span className="index-no">0{i + 2}</span><span className="index-thumb"><img src={film.thumbnail} alt="" loading="lazy" /></span><strong>{film.title}</strong><small>{film.category}</small><span className="index-play" aria-hidden="true">Play ↗</span>
       </button>)}
     </div>
-    <p className="reel-note">Modular gedacht: Der Index kann mit neuen, beratungsnahen Arbeiten weiterwachsen.</p>
     <dialog ref={dialogRef} className="film-dialog" aria-label={active ? `Film: ${active.title}` : 'Filmplayer'} onCancel={(event) => { event.preventDefault(); closeFilm() }} onClose={() => { document.body.classList.remove('dialog-open'); if (active) setActive(null) }} onClick={(event) => { if (event.target === event.currentTarget) closeFilm() }}>
       {active && <div className="dialog-panel">
         <div className="dialog-bar"><div><span>{active.category}</span><strong>{active.title}</strong></div><button ref={closeRef} type="button" onClick={closeFilm} aria-label="Film schließen">Schließen ×</button></div>
         <div className="embed-shell"><iframe src={active.embed} title={active.title} allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /></div>
-        <div className="dialog-foot"><span>Externer Player: {active.source}</span><span>ESC zum Schließen</span></div>
+        <div className="dialog-foot"><span>Portfoliofilm · kuratierte Auswahl</span><span>ESC zum Schließen</span></div>
       </div>}
     </dialog>
   </section>
@@ -190,7 +190,7 @@ function Home() {
 
       <section className="formats section" id="formate">
         <div className="section-index"><span>04</span><p>Zwei Formatideen</p></div>
-        <p className="eyebrow">Noch keine Vogel-Formate. Zwei konkrete Startpunkte.</p>
+        <p className="eyebrow">Zwei Formatideen für wiedererkennbare Geschichten aus dem Mittelstand.</p>
         <div className="format-grid">
           <article className="format salmon"><div className="format-no">A—01</div><h2>WAS<br />TRÄGT.</h2><p className="serif">Ein dokumentarisches Porträt über die Entscheidung, die ein Familienunternehmen geprägt hat.</p><dl><div><dt>Länge</dt><dd>6–10 Minuten</dd></div><div><dt>Kern</dt><dd>Eine Person. Ein Prozess. Eine Entscheidung.</dd></div><div><dt>Ausspielung</dt><dd>Hero Film · 3 Vertical Chapters · Still Set · Audio · Quotes · Archiv</dd></div></dl><p className="note">Keine chronologische Firmengeschichte. Eine echte Spannung, erzählt an einem konkreten Detail.</p></article>
           <article className="format green"><div className="format-no">B—01 / weekly</div><h2>EINE GUTE<br />FRAGE.</h2><p className="serif">Eine reale Frage aus dem unternehmerischen Alltag. Präzise beantwortet von jemandem, der ihn kennt.</p><dl><div><dt>Länge</dt><dd>45–75 Sekunden</dd></div><div><dt>Rhythmus</dt><dd>Eine klare Dramaturgie, jede Woche ein anderes Thema</dd></div><div><dt>Ausspielung</dt><dd>LinkedIn · Instagram · Shorts · Editorial</dd></div></dl><p className="note">Einfach wiederholbar, aber nie austauschbar – weil die Frage und die Person im Zentrum bleiben.</p></article>
@@ -209,9 +209,9 @@ function Home() {
 
       <section className="plan section" id="plan">
         <div className="section-index"><span>06</span><p>Die ersten 90 Tage</p></div>
-        <div className="plan-head"><h2>Erst verstehen.<br />Dann wiederholen.<br /><em>Gemeinsam besser werden.</em></h2><p>Ein Vorschlag für den Einstieg – nicht als fertige Antwort, sondern als belastbarer Gesprächsanfang.</p></div>
+        <div className="plan-head"><h2>Erst verstehen.<br />Dann wiederholen.<br /><em>Gemeinsam besser werden.</em></h2><p>Ein Einstieg, der zuhört, schnell ins Machen kommt und aus jedem Durchlauf lernt.</p></div>
         <div className="days">
-          <article><span>01—30</span><h3>Sehen & setzen</h3><p>Brand- und Motion-Audit, Praktiker kennenlernen, Technik- und Raumbedarf klären, Datei- und Exportlogik definieren, erste schlanke Piloten.</p></article>
+          <article><span>01—30</span><h3>Sehen & setzen</h3><p>Brand- und Motion-Audit, Praktiker kennenlernen, Themenfelder priorisieren und erste schlanke Formate produzieren.</p></article>
           <article><span>31—60</span><h3>Bauen & wiederholen</h3><p>Erste Formatvorlagen, erstes Mandantenporträt, gemeinsames Cadence Board, wiederverwendbare Pre-/Post-Checklisten und Asset-Struktur.</p></article>
           <article><span>61—90</span><h3>Stabilisieren & lernen</h3><p>Verlässlicher Rhythmus, Review-Loop mit Brand & Content, Production Playbook v1 und ein Muster für Event-Repurposing.</p></article>
         </div>
@@ -281,14 +281,15 @@ function CoverLetter() {
       <header className="letter-header"><div><span>Mario Schubert × Vogel Beratung</span><strong>Bewerbung / 07.2026</strong></div><aside><a href="mailto:servus@marioschub.com">servus@marioschub.com</a><a href="tel:+4915155338029">+49 1515 5338029</a><span>Ingolstadt</span></aside></header>
       <div className="letter-title"><span>Videograf & Bewegtbild Producer</span><h1>Bewerbung als<br /><em>Videograf & Bewegtbild Producer</em></h1></div>
       <div className="letter-body">
-        <p>Liebes Vogel-Team,</p>
-        <p>die meisten Unternehmen suchen jemanden für Videos. Ihr sucht jemanden, der die Sprache dahinter mit aufbaut. Das ist ein Unterschied – und ehrlich gesagt der Grund, warum ich bei der Ausschreibung hängen geblieben bin.</p>
-        <p>Seit 2023 verantworte ich mit WYLDWORKS Produktionen für mehr als 30 Unternehmen: von der ersten Idee über Kamera und Schnitt bis zur fertigen Ausspielung. Selbstständigkeit bedeutet dabei auch, dass niemand anderes das Rohmaterial sortiert, den Zeitplan rettet oder den Prozess für den nächsten Dreh verbessert. Davor habe ich bei Achtzig20 ein Kreativteam von zwei auf mehr als zehn Menschen mit aufgebaut und gelernt, wie aus individuellem Können gemeinsame Qualität wird.</p>
-        <p>Was ich bei Vogel spannend finde, ist die Verbindung aus Anspruch und Wiederholung. Ein guter Film ist wichtig. Noch interessanter ist die Frage, wie auch der zehnte Film eine klare Handschrift hat, ohne zur Schablone zu werden. Ich arbeite gern genau an dieser Stelle: Bildidee, Handwerk und ein System, das dem Team Arbeit abnimmt, statt neue Bürokratie zu bauen.</p>
-        <p>Ich komme lieber mit einer ersten Bildidee in den Raum als mit einer Liste offener Fragen. Danach höre ich zu – besonders den Menschen, die fachlich tiefer im Thema stecken als ich – und schärfe daraus die Geschichte. Diesen Wechsel aus Eigeninitiative und gemeinsamem Weiterdenken suche ich auch für meinen nächsten Schritt.</p>
-        <p>Meine Basis ist Ingolstadt, die Rolle in München ist für mich bewusst eine Präsenzrolle. Die ausführliche Bewerbung, konkrete Formatideen, Arbeitsproben und meinen aktuellen CV findet ihr unter: <a href="https://mario-schubert-vogel.vercel.app">mario-schubert-vogel.vercel.app</a></p>
-        <p>Wenn ihr euch darin wiederfindet, freue ich mich auf ein Gespräch. Nicht mit einem perfekten Masterplan – aber ziemlich sicher mit einer ersten Bildidee.</p>
-        <p className="letter-signoff">Servus<br /><strong>Mario Schubert</strong></p>
+        <p>Sehr geehrtes Vogel-Team,</p>
+        <p>die ausgeschriebene Position verbindet zwei Aufgaben, die meine bisherige Arbeit prägen: Bewegtbild eigenverantwortlich von der Konzeption bis zur Ausspielung zu produzieren und daraus eine konsistente visuelle Handschrift zu entwickeln. Diese Verbindung aus gestalterischem Anspruch, technischem Handwerk und effizienter Produktion möchte ich bei Vogel einbringen.</p>
+        <p>Seit 2023 verantworte ich mit WYLDWORKS Produktionen für mehr als 30 Unternehmen. Dabei begleite ich den gesamten Prozess – von der Entwicklung der Bildidee und der Drehvorbereitung über Kamera, Licht und Ton bis zu Schnitt, Postproduktion und finaler Ausspielung. Ich arbeite mit schlanken Abläufen, treffe gestalterische Entscheidungen früh und lege besonderen Wert auf Bildwirkung, Rhythmus und einen präzisen Gesamtlook.</p>
+        <p>Zuvor habe ich bei Achtzig20 ein Kreativteam von zwei auf mehr als zehn Mitarbeitende mit aufgebaut und im Co-Lead begleitet. Neben der Entwicklung visueller Konzepte und Storytelling-Formate habe ich Foto- und Videoproduktionen geplant, umgesetzt und bis zum Rollout verantwortet. Dabei habe ich gelernt, wie sich kreative Qualität auch in wiederkehrenden Produktionen verlässlich sichern lässt.</p>
+        <p>Genau darin sehe ich die besondere Aufgabe bei Vogel: Bewegtbild nicht als Folge unabhängiger Einzelproduktionen zu behandeln, sondern als langfristig wiedererkennbare Sprache der Marke. Ich möchte Formate entwickeln, die effizient produziert und über unterschiedliche Kanäle ausgespielt werden können, ohne dabei an gestalterischer Eigenständigkeit zu verlieren.</p>
+        <p>In der Postproduktion arbeite ich vor allem mit Final Cut Pro und After Effects. Neue technische Anforderungen und Produktionsumgebungen erschließe ich mir strukturiert und praxisnah. Die regelmäßige Präsenz am Standort München ist für mich sichergestellt; ein Einstieg ist ab sofort möglich.</p>
+        <p>Ein ausführlicheres Bild meiner Arbeitsweise, ausgewählte Filmreferenzen und den aktuellen Lebenslauf finden Sie in meiner digitalen Bewerbung: <a href="https://mario-schubert-vogel.vercel.app">mario-schubert-vogel.vercel.app</a></p>
+        <p>Ich freue mich darauf, Ihnen im persönlichen Gespräch zu zeigen, wie ich meine Erfahrung, meine Arbeitsweise und meine Bildsprache in den Aufbau der Bewegtbildproduktion bei Vogel einbringen kann.</p>
+        <p className="letter-signoff">Mit freundlichen Grüßen<br /><strong>Mario Schubert</strong></p>
       </div>
       <footer className="letter-footer"><span>Serienfähig. Ohne serienmäßig auszusehen.</span><a href="https://mario-schubert-vogel.vercel.app">mario-schubert-vogel.vercel.app ↗</a></footer>
     </article>
