@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 const nav = [
-  ['Jetzt', 'jetzt'], ['Arbeit', 'arbeit'], ['Formate', 'formate'],
+  ['Filme', 'filme'], ['Warum', 'jetzt'], ['Arbeit', 'arbeit'], ['Formate', 'formate'],
   ['System', 'system'], ['90 Tage', 'plan'], ['Profil', 'profil'],
 ]
 
@@ -109,18 +109,18 @@ function VideoLibrary() {
   }
 
   return <section className="reel section" id="filme">
-    <div className="section-index"><span>02B</span><p>Film index / Auswahl</p></div>
-    <div className="reel-head"><h2>Acht Filme.<br /><em>Eine Frage:</em><br />Was trägt die Geschichte?</h2><p>Architektur, Mittelstand, Gespräch, Premium Brand, Event und Menschen. Die Filme laden erst, wenn ihr sie öffnet.</p></div>
+    <div className="reel-cover-label"><span>01 / Film dossier</span><span>Featured story</span><span>WYLDWORKS Auswahl</span></div>
     <div className="reel-featured">
-      {[films[0], films[5]].map((film, i) => <button className="film-feature" type="button" key={film.title} onClick={(event) => openFilm(film, event.currentTarget)} aria-label={`${film.title} abspielen`}>
+      {[films[0]].map((film) => <button className="film-feature film-cover" type="button" key={film.title} onClick={(event) => openFilm(film, event.currentTarget)} aria-label={`${film.title} abspielen`}>
         <img src={film.thumbnail} alt="" loading="lazy" /><span className="film-shade" />
-        <span className="film-number">F—0{i + 1}</span><span className="film-play" aria-hidden="true">▶</span>
+        <span className="film-number">F—01 / Lead film</span><span className="film-play" aria-hidden="true">▶</span>
         <span className="film-caption"><small>{film.category}</small><strong>{film.title}</strong></span>
       </button>)}
     </div>
+    <div className="reel-head"><h2>Bewegtbild<br /><em>zuerst.</em></h2><p>Acht Arbeiten zwischen Architektur, Mittelstand, Gespräch, Premium Brand, Event und Menschen. Ein Lead Film – sieben weitere Blickwinkel im Index.</p></div>
     <div className="film-index" aria-label="Weitere ausgewählte Filme">
-      {films.filter((_, i) => i !== 0 && i !== 5).map((film, i) => <button type="button" key={film.title} onClick={(event) => openFilm(film, event.currentTarget)} aria-label={`${film.title} abspielen`}>
-        <span className="index-no">0{i + 3}</span><span className="index-thumb"><img src={film.thumbnail} alt="" loading="lazy" /></span><strong>{film.title}</strong><small>{film.category}</small><span className="index-play" aria-hidden="true">Play ↗</span>
+      {films.slice(1).map((film, i) => <button type="button" key={film.title} onClick={(event) => openFilm(film, event.currentTarget)} aria-label={`${film.title} abspielen`}>
+        <span className="index-no">0{i + 2}</span><span className="index-thumb"><img src={film.thumbnail} alt="" loading="lazy" /></span><strong>{film.title}</strong><small>{film.category}</small><span className="index-play" aria-hidden="true">Play ↗</span>
       </button>)}
     </div>
     <p className="reel-note">Modular gedacht: Der Index kann mit neuen, beratungsnahen Arbeiten weiterwachsen.</p>
@@ -146,7 +146,7 @@ function Home() {
           <div className="hero-intro">
             <p>Servus Vogel. Ich bin Mario Schubert – Bildgestalter, Produzent und UX-Denker aus Ingolstadt.</p>
             <p>Ich verbinde Idee, Kamera, Post und System. Damit aus guten Einzelstücken eine Bildsprache wird.</p>
-            <div className="hero-actions"><a className="button mint" href="#arbeit">Arbeit ansehen ↓</a><a className="text-link" href="mailto:servus@marioschub.com">Direkt sprechen ↗</a></div>
+            <div className="hero-actions"><a className="button mint" href="#filme">Filme ansehen ↓</a><a className="text-link" href="mailto:servus@marioschub.com">Direkt sprechen ↗</a></div>
           </div>
           <HeroVideo />
           <aside className="slate" aria-label="Bewerbungsdetails">
@@ -156,8 +156,10 @@ function Home() {
         </div>
       </section>
 
+      <VideoLibrary />
+
       <section className="section now" id="jetzt">
-        <div className="section-index"><span>01</span><p>Warum jetzt</p></div>
+        <div className="section-index"><span>02</span><p>Warum jetzt</p></div>
         <div className="now-copy"><h2>Ein Team.<br />Ein Anspruch.<br /><em>Eine Sprache, die wächst.</em></h2>
           <div className="prose"><p>Selbstständigkeit hat mir beigebracht, alles zu tragen: Strategie, Akquise, Produktion und den letzten Export. Das schafft Ownership. Es macht aber auch deutlich, was mir als Nächstes wichtig ist.</p><p>Ich möchte nicht nach jedem letzten Cut weiterziehen, sondern die nächsten hundert Filme besser machen als die ersten zehn. Mit einem Team, das Gestaltung ernst nimmt, offen diskutiert und Standards nicht als Einschränkung versteht, sondern als Basis für mehr gute Arbeit.</p><p>Genau darin sehe ich bei Vogel die spannende Aufgabe: Bewegtbild nicht nur produzieren, sondern von Anfang an so aufbauen, dass Qualität und Takt zusammenpassen.</p></div>
         </div>
@@ -165,7 +167,7 @@ function Home() {
       </section>
 
       <section className="work section dark" id="arbeit">
-        <div className="section-index light"><span>02</span><p>Ausgewählte Arbeit</p></div>
+        <div className="section-index light"><span>03</span><p>Ausgewählte Arbeit</p></div>
         <div className="work-heading"><p>Mittelstand, Menschen, Präzision</p><h2>Arbeit, die nah genug rangeht.</h2></div>
         <article className="case case-film">
           <div className="case-visual"><video muted loop playsInline preload="none" poster="/media/griesmueller-poster.jpg"><source src="/media/griesmueller.mp4" type="video/mp4" /></video><span className="frame-mark">01 / 03</span></div>
@@ -175,13 +177,11 @@ function Home() {
           <article className="case"><div className="case-visual portrait"><img src="/media/feig-doka.jpg" alt="Gerüstbauer bei der Montage auf der Bauma" /><span className="frame-mark">02 / 03</span></div><div className="case-copy"><span>Event & Produkt</span><h3>Feig Gerüste × Doka</h3><p>Arbeit in Bewegung, verdichtet auf Hände, Material und den Moment.</p><strong>Fotografie · Bildauswahl · Postproduktion</strong></div></article>
           <article className="case offset"><div className="case-visual"><img src="/media/maschinenbau.jpg" alt="Schwere Spezialmaschine von Ludwig Bauch auf einem Industrieareal" /><span className="frame-mark">03 / 03</span></div><div className="case-copy"><span>Industrie & Präzision</span><h3>Ludwig Bauch Maschinentechnik</h3><p>Technik bekommt Maßstab, wenn Konstruktion und Umgebung miteinander sprechen.</p><strong>Konzept · Fotografie · Postproduktion</strong></div></article>
         </div>
-        <div className="portfolio-links"><a href="#filme">Acht Filme im Index ↓</a><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">Mehr auf WYLDWORKS ↗</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com ↗</a></div>
+        <div className="portfolio-links"><a href="#filme">Zum Filmindex ↑</a><a href="https://www.wyldworks.de/" target="_blank" rel="noreferrer">Mehr auf WYLDWORKS ↗</a><a href="https://marioschub.com/" target="_blank" rel="noreferrer">marioschub.com ↗</a></div>
       </section>
 
-      <VideoLibrary />
-
       <section className="formats section" id="formate">
-        <div className="section-index"><span>03</span><p>Zwei Formatideen</p></div>
+        <div className="section-index"><span>04</span><p>Zwei Formatideen</p></div>
         <p className="eyebrow">Noch keine Vogel-Formate. Zwei konkrete Startpunkte.</p>
         <div className="format-grid">
           <article className="format salmon"><div className="format-no">A—01</div><h2>WAS<br />TRÄGT.</h2><p className="serif">Ein dokumentarisches Porträt über die Entscheidung, die ein Familienunternehmen geprägt hat.</p><dl><div><dt>Länge</dt><dd>6–10 Minuten</dd></div><div><dt>Kern</dt><dd>Eine Person. Ein Prozess. Eine Entscheidung.</dd></div><div><dt>Ausspielung</dt><dd>Hero Film · 3 Vertical Chapters · Still Set · Audio · Quotes · Archiv</dd></div></dl><p className="note">Keine chronologische Firmengeschichte. Eine echte Spannung, erzählt an einem konkreten Detail.</p></article>
@@ -190,7 +190,7 @@ function Home() {
       </section>
 
       <section className="system section" id="system">
-        <div className="section-index light"><span>04</span><p>Motion System</p></div>
+        <div className="section-index light"><span>05</span><p>Motion System</p></div>
         <div className="system-head"><h2>Eine Produktion.<br /><em>Viele gute Gründe, sie zu finden.</em></h2><p>Geschmack entscheidet im Bild.<br />Struktur entscheidet, ob es jede Woche gelingt.</p></div>
         <ol className="pipeline">
           {['Zuhören', 'Die Frage finden', 'Treatment / Shotlist', 'Lean Shoot', 'Edit / Grade / Sound', 'Formatversionen', 'Archiv / Lernen'].map((item, i) => <li key={item}><small>0{i + 1}</small><span>{item}</span></li>)}
@@ -200,7 +200,7 @@ function Home() {
       </section>
 
       <section className="plan section" id="plan">
-        <div className="section-index"><span>05</span><p>Die ersten 90 Tage</p></div>
+        <div className="section-index"><span>06</span><p>Die ersten 90 Tage</p></div>
         <div className="plan-head"><h2>Erst verstehen.<br />Dann wiederholen.<br /><em>Gemeinsam besser werden.</em></h2><p>Ein Vorschlag für den Einstieg – nicht als fertige Antwort, sondern als belastbarer Gesprächsanfang.</p></div>
         <div className="days">
           <article><span>01—30</span><h3>Sehen & setzen</h3><p>Brand- und Motion-Audit, Praktiker kennenlernen, Technik- und Raumbedarf klären, Datei- und Exportlogik definieren, erste schlanke Piloten.</p></article>
@@ -210,7 +210,7 @@ function Home() {
       </section>
 
       <section className="proof section" id="profil">
-        <div className="section-index"><span>06</span><p>Was ich mitbringe</p></div>
+        <div className="section-index"><span>07</span><p>Was ich mitbringe</p></div>
         <div className="proof-grid">
           <div className="proof-title"><h2>Bildgefühl.<br /><em>Und der Wille,</em><br />es verlässlich<br />zu machen.</h2><div className="document-actions"><a className="button dark-button" href="/cv">Lebenslauf ansehen →</a><a className="text-link" href="/anschreiben">Anschreiben lesen →</a></div></div>
           <div className="proof-list">
