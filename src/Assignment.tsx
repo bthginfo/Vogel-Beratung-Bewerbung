@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { aiDisclosure, assignmentAnswers, type AssignmentAnswer } from './assignmentData'
 import './assignment.css'
 
 const PDF_PATH = '/documents/Mario_Schubert_Assignment_Vogel.pdf'
+const DIRECTOR_URL = 'https://mario-schubert-vogel.vercel.app/assignment-v2'
+
+function AssignmentModeSwitch() {
+  return <nav className="assignment-mode-switch" aria-label="Fassung wählen">
+    <span aria-current="page">Original Cut</span><a href="/assignment-v2">Director’s Cut</a>
+  </nav>
+}
 
 function useAssignmentDocument(title: string, bodyClass: string, enableMotion = false) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const previousTitle = document.title
     document.title = title
     document.body.classList.add(bodyClass)
@@ -39,7 +46,7 @@ function Chapter({ answer }: { answer: AssignmentAnswer }) {
   const sectionRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0
     const update = () => {
       frame = 0
@@ -50,7 +57,8 @@ function Chapter({ answer }: { answer: AssignmentAnswer }) {
       const travel = Math.max(1, rect.height - window.innerHeight)
       const progress = Math.min(1, Math.max(0, -rect.top / travel))
       stage.style.setProperty('--chapter-progress', progress.toFixed(4))
-      stage.dataset.phase = progress < .23 ? 'question' : progress < .47 ? 'position' : progress < .72 ? 'rationale' : 'price'
+      const anchored = window.location.hash === `#question-${answer.number}`
+      stage.dataset.phase = progress < .23 ? (anchored ? 'position' : 'question') : progress < .47 ? 'position' : progress < .72 ? 'rationale' : 'price'
     }
     const requestUpdate = () => {
       if (!frame) frame = window.requestAnimationFrame(update)
@@ -64,15 +72,15 @@ function Chapter({ answer }: { answer: AssignmentAnswer }) {
       window.removeEventListener('resize', requestUpdate)
       if (frame) window.cancelAnimationFrame(frame)
     }
-  }, [])
+  }, [answer.number])
 
-  return <article className="assignment-chapter" id={`question-${answer.number}`} ref={sectionRef} data-chapter={answer.number}>
-    <div className="chapter-stage" ref={stageRef} data-phase="question">
+  return <article className="assignment-chapter" id={`question-${answer.number}`} ref={sectionRef} data-chapter={answer.number} tabIndex={-1}>
+    <div className="chapter-stage" ref={stageRef} data-phase="position">
       <header className="chapter-heading">
         <span className="chapter-number" aria-hidden="true">{answer.number}</span>
         <div><span>Frage {answer.number} / 08</span><strong>{answer.title}</strong></div>
       </header>
-      <h2 className="chapter-question">{answer.question}</h2>
+      <h2 className={`chapter-question${answer.question.length > 82 ? ' chapter-question-long' : ''}`}>{answer.question}</h2>
       <div className="chapter-answers">
         <section className="chapter-position" aria-labelledby={`position-${answer.number}`}>
           <h3 id={`position-${answer.number}`}>Festlegung</h3>
@@ -95,6 +103,35 @@ function Chapter({ answer }: { answer: AssignmentAnswer }) {
 export function Assignment() {
   const [activeChapter, setActiveChapter] = useState('top')
   useAssignmentDocument('Acht Fragen · Mario Schubert · Vogel', 'assignment-body', true)
+
+  useLayoutEffect(() => {
+    let cancelled = false
+    const frames: number[] = []
+    const positionHash = () => {
+      if (!window.location.hash.startsWith('#question-')) return
+      const target = document.querySelector<HTMLElement>(window.location.hash)
+      if (!target) return
+      const top = window.scrollY + target.getBoundingClientRect().top
+      window.scrollTo({ top, left: 0, behavior: 'instant' as ScrollBehavior })
+      target.focus({ preventScroll: true })
+    }
+    const settle = () => {
+      if (cancelled) return
+      positionHash()
+      frames.push(window.requestAnimationFrame(() => {
+        positionHash()
+        frames.push(window.requestAnimationFrame(positionHash))
+      }))
+    }
+    settle()
+    document.fonts.ready.then(settle)
+    window.addEventListener('hashchange', settle)
+    return () => {
+      cancelled = true
+      frames.forEach((frame) => window.cancelAnimationFrame(frame))
+      window.removeEventListener('hashchange', settle)
+    }
+  }, [])
 
   useEffect(() => {
     const targets = Array.from(document.querySelectorAll<HTMLElement>('[data-assignment-section]'))
@@ -126,6 +163,7 @@ export function Assignment() {
         </div>
         <div className="opening-actions">
           <a className="assignment-download" href={PDF_PATH} download>PDF herunterladen <span>↓</span></a>
+          <AssignmentModeSwitch />
           <a className="scroll-cue" href="#question-01"><i />Scrollen, um Position zu beziehen</a>
         </div>
       </section>
@@ -140,7 +178,7 @@ export function Assignment() {
         </div>
         <div className="closing-statement">
           <p>Positionen dürfen sich entwickeln. <em>Verantwortung bleibt.</em></p>
-          <a className="assignment-download assignment-download-dark" href={PDF_PATH} download>PDF herunterladen <span>↓</span></a>
+          <div className="closing-actions"><AssignmentModeSwitch /><a className="assignment-download assignment-download-dark" href={PDF_PATH} download>PDF herunterladen <span>↓</span></a></div>
         </div>
       </section>
     </main>
@@ -149,7 +187,8 @@ export function Assignment() {
 
 function PrintQuestion({ answer }: { answer: AssignmentAnswer }) {
   return <article className="print-question">
-    <header><span>{answer.number}</span><strong>{answer.title}</strong></header>
+    <span className="print-edge" aria-hidden="true" />
+    <header><span>{answer.number}</span><div><small>FRAME {answer.number} / 08</small><strong>{answer.title}</strong></div></header>
     <h2>{answer.question}</h2>
     <section className="print-position"><h3>Festlegung</h3><p>{answer.position}</p></section>
     <section className="print-rationale"><h3>Begründung</h3><p>{answer.rationale}</p></section>
@@ -182,11 +221,15 @@ export function AssignmentPrint() {
   return <main className="assignment-print" aria-label="Druckfassung der Vogel Assignment">
     <section className="print-page print-cover">
       <div className="print-cover-meta"><span>Vogel · Assignment 2026</span><span>Mario Schubert</span></div>
-      <p>Eine Entscheidungskammer in acht Schnitten</p>
-      <h1>Acht Fragen.<br />Acht Festlegungen.<br /><em>Keine Ausweichbewegung.</em></h1>
+      <p>The Decision Field / Quiet Cut</p>
+      <h1>Acht Fragen.<br /><em>/</em> Acht Festlegungen.</h1>
       <div className="print-cover-index" aria-label="Kapitel 01 bis 08">
         {assignmentAnswers.map((answer) => <span key={answer.number}>{answer.number}</span>)}
       </div>
+      <a className="print-online-ticket" href={DIRECTOR_URL}>
+        <span className="print-ticket-copy"><small>Online ticket / Director’s Cut</small><strong>Diese sechs Seiten sind die ruhige Fassung.</strong><b>Die interaktive Storyline lebt online.</b><span>{DIRECTOR_URL}</span></span>
+        <img src="/documents/assignment-v2-qr.png" alt="QR-Code zur interaktiven Director’s-Cut-Fassung" />
+      </a>
       <PrintFooter page={1} />
     </section>
 
@@ -204,6 +247,7 @@ export function AssignmentPrint() {
         <p>{aiDisclosure.answer}</p>
       </div>
       <blockquote>Positionen dürfen sich entwickeln.<br /><em>Verantwortung bleibt.</em></blockquote>
+      <a className="print-end-link" href={DIRECTOR_URL}><span>Director’s Cut online ansehen</span><strong>{DIRECTOR_URL}</strong><img src="/documents/assignment-v2-qr.png" alt="QR-Code zur Director’s-Cut-Fassung" /></a>
       <PrintFooter page={6} />
     </section>
   </main>
