@@ -82,7 +82,7 @@ export function AssignmentPrint() {
     <section className="print-page print-cover">
       <div className="print-cover-meta"><span>Vogel · Assignment 2026</span><span>Mario Schubert</span></div>
       <p>The Decision Field / Quiet Cut</p>
-      <h1>Acht Fragen.<br /><em>/</em> Acht Festlegungen.</h1>
+      <h1>Acht Fragen.<br /><em>/</em> Acht Entscheidungen.</h1>
       <div className="print-cover-index" aria-label="Kapitel 01 bis 08">
         {assignmentAnswers.map((answer) => <span key={answer.number}>{answer.number}</span>)}
       </div>

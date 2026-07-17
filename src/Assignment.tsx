@@ -8,7 +8,7 @@ const beatNames = ['FRAGE', 'FESTLEGUNG', 'BEGRÜNDUNG', 'PREIS'] as const
 function useAssignmentDocument() {
   useEffect(() => {
     const previousTitle = document.title
-    document.title = 'Acht Fragen · Acht Festlegungen · Mario Schubert'
+    document.title = 'Acht Fragen · Acht Entscheidungen · Mario Schubert'
     document.body.classList.add('assignment-body')
     return () => {
       document.title = previousTitle
@@ -356,7 +356,7 @@ export function Assignment() {
       <div className="assignment-hero-meta"><span>VOGEL · ASSIGNMENT 2026</span><span>MARIO SCHUBERT</span></div>
       <div className="assignment-title-block">
         <p>THE DECISION FIELD</p>
-        <h1><span>ACHT FRAGEN</span><i>/</i><span>ACHT FESTLEGUNGEN</span></h1>
+        <h1><span>ACHT FRAGEN</span><i>/</i><span>ACHT ENTSCHEIDUNGEN</span></h1>
         <blockquote>Position ist kein Standbild.<br /><em>Sie entsteht in Bewegung.</em></blockquote>
       </div>
       <div className="assignment-hero-footer">
