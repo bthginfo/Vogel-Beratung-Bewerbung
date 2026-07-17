@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Assignment, AssignmentPrint } from './Assignment'
-import { AssignmentV2 } from './AssignmentV2'
+import { Assignment } from './Assignment'
+import { AssignmentPrint } from './AssignmentPrint'
 
 const nav = [
   ['Filme', 'filme'], ['Warum', 'jetzt'], ['Arbeit', 'arbeit'], ['Formate', 'formate'],
@@ -301,7 +301,14 @@ function CoverLetter() {
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '')
   if (path === '/assignment') return <Assignment />
-  if (path === '/assignment-v2') return <AssignmentV2 />
+  if (path === '/assignment-v2') {
+    const hash = window.location.hash
+      .replace(/^#director-question-(0[1-8])$/, '#question-$1')
+      .replace(/^#assignment-question-(0[1-8])$/, '#question-$1')
+      .replace(/^#(?:director|assignment)-transparency$/, '#transparency')
+    window.location.replace(`/assignment${hash}`)
+    return null
+  }
   if (path === '/assignment-print') return <AssignmentPrint />
   if (path === '/cv') return <CV />
   if (path === '/anschreiben') return <CoverLetter />
