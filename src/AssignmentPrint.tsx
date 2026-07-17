@@ -4,6 +4,17 @@ import './assignmentPrint.css'
 
 const ASSIGNMENT_URL = 'https://mario-schubert-vogel.vercel.app/assignment'
 
+const chapterLayouts = [
+  'verdict-plane',
+  'consequence-edge',
+  'dark-interlude',
+  'editorial-split',
+  'consequence-edge mirror',
+  'dark-interlude reverse',
+  'number-poster',
+  'verdict-plane finale',
+]
+
 function usePrintDocument() {
   useEffect(() => {
     const previousTitle = document.title
@@ -21,44 +32,51 @@ function usePrintDocument() {
   }, [])
 }
 
-function PrintQuestion({ answer }: { answer: AssignmentAnswer }) {
-  const odd = Number(answer.number) % 2 === 1
-  return <article className={`print-question print-question-${odd ? 'odd' : 'even'}`}>
-    <span className="print-ghost-number" aria-hidden="true">{answer.number}</span>
-    <header>
-      <small>FRAME {answer.number} / 08</small>
-      <strong>{answer.title}</strong>
-    </header>
-    <h2>{answer.question}</h2>
-    <div className="print-diptych">
-      <section className="print-position" aria-labelledby={`print-position-${answer.number}`}>
-        <h3 id={`print-position-${answer.number}`}>Festlegung</h3>
-        <p>{answer.position}</p>
-      </section>
-      <section className="print-rationale" aria-labelledby={`print-rationale-${answer.number}`}>
-        <h3 id={`print-rationale-${answer.number}`}>Begründung</h3>
-        <p>{answer.rationale}</p>
-      </section>
-    </div>
-    <section className="print-price" aria-labelledby={`print-price-${answer.number}`}>
-      <h3 id={`print-price-${answer.number}`}>Preis</h3>
-      <p>{answer.price}</p>
-    </section>
-  </article>
+function PrintFooter({ page, inverse = false }: { page: number; inverse?: boolean }) {
+  return <footer className={`print-footer${inverse ? ' print-footer-inverse' : ''}`}>
+    <span>Mario Schubert × Vogel</span>
+    <span>Assignment 2026</span>
+    <span>{String(page).padStart(2, '0')} / 10</span>
+  </footer>
 }
 
-function PrintFooter({ page }: { page: number }) {
-  return <footer className="print-footer"><span>Mario Schubert</span><span>Vogel · Assignment 2026</span><span>{String(page).padStart(2, '0')} / 06</span></footer>
+function PrintQuestion({ answer, index }: { answer: AssignmentAnswer; index: number }) {
+  const layout = chapterLayouts[index]
+  const inverse = layout.includes('dark-interlude')
+
+  return <section className={`print-page print-chapter print-chapter-${layout}`} id={`print-question-${answer.number}`}>
+    <div className="print-chapter-number" aria-hidden="true">{answer.number}</div>
+    <header className="print-chapter-header">
+      <span>Frage {answer.number} / 08</span>
+      <strong>{answer.title}</strong>
+    </header>
+
+    <div className="print-question-beat">
+      <span className="print-beat-index">01 / Frage</span>
+      <h2>{answer.question}</h2>
+    </div>
+
+    <section className="print-verdict-beat" aria-labelledby={`print-position-${answer.number}`}>
+      <h3 id={`print-position-${answer.number}`}>02 / Festlegung</h3>
+      <p>{answer.position}</p>
+    </section>
+
+    <section className="print-rationale-beat" aria-labelledby={`print-rationale-${answer.number}`}>
+      <h3 id={`print-rationale-${answer.number}`}>03 / Begründung</h3>
+      <p>{answer.rationale}</p>
+    </section>
+
+    <section className="print-price-beat" aria-labelledby={`print-price-${answer.number}`}>
+      <h3 id={`print-price-${answer.number}`}>04 / Preis</h3>
+      <p>{answer.price}</p>
+    </section>
+
+    <PrintFooter page={index + 2} inverse={inverse} />
+  </section>
 }
 
 export function AssignmentPrint() {
   usePrintDocument()
-  const spreads = [
-    assignmentAnswers.slice(0, 2),
-    assignmentAnswers.slice(2, 4),
-    assignmentAnswers.slice(4, 6),
-    assignmentAnswers.slice(6, 8),
-  ]
 
   return <main className="assignment-print" aria-label="Druckfassung der Vogel Assignment">
     <section className="print-page print-cover">
@@ -69,19 +87,14 @@ export function AssignmentPrint() {
         {assignmentAnswers.map((answer) => <span key={answer.number}>{answer.number}</span>)}
       </div>
       <a className="print-online-link" href={ASSIGNMENT_URL}>
-        <span><small>Online / interaktive Fassung</small><strong>Diese sechs Seiten sind die ruhige Fassung.</strong><b>Die interaktive Storyline lebt online.</b></span>
+        <span><small>Online / interaktive Fassung</small><strong>Diese zehn Seiten sind die ruhige Fassung.</strong><b>Die interaktive Storyline lebt online.</b></span>
         <span className="print-link-address">{ASSIGNMENT_URL}</span>
         <i aria-hidden="true">→</i>
       </a>
-      <PrintFooter page={1} />
+      <PrintFooter page={1} inverse />
     </section>
 
-    {spreads.map((answers, index) => <section className={`print-page print-spread print-spread-${index + 1}`} id={`print-spread-${index + 1}`} key={answers[0].number}>
-      <div className="print-page-heading"><span>Quiet Cut / Editorial Frames</span><strong>{answers[0].number}—{answers[1].number}</strong></div>
-      <div className="print-film-gutter" aria-hidden="true"><i /><span>{String(index + 1).padStart(2, '0')}</span><i /></div>
-      <div className="print-question-grid">{answers.map((answer) => <PrintQuestion answer={answer} key={answer.number} />)}</div>
-      <PrintFooter page={index + 2} />
-    </section>)}
+    {assignmentAnswers.map((answer, index) => <PrintQuestion answer={answer} index={index} key={answer.number} />)}
 
     <section className="print-page print-transparency">
       <div className="print-page-heading"><span>Vogel · Assignment 2026</span><strong>09 / Transparenz</strong></div>
@@ -92,7 +105,7 @@ export function AssignmentPrint() {
       </div>
       <blockquote>Positionen dürfen sich entwickeln.<br /><em>Verantwortung bleibt.</em></blockquote>
       <a className="print-end-link" href={ASSIGNMENT_URL}><span>Die interaktive Storyline online erleben →</span><strong>{ASSIGNMENT_URL}</strong></a>
-      <PrintFooter page={6} />
+      <PrintFooter page={10} inverse />
     </section>
   </main>
 }
