@@ -121,12 +121,22 @@ function splitQuestion(text: string) {
   return groups
 }
 
+function questionTypography(text: string) {
+  const longestWord = Math.max(...text.split(/\s+/).map((word) => word.replace(/[^\p{L}\p{N}-]/gu, '').length))
+  const density = text.length > 92 ? 'dense' : text.length > 72 ? 'extended' : 'standard'
+  return {
+    className: `question-copy question-copy--${density}${longestWord >= 16 ? ' question-copy--longword' : ''}`,
+    longestWord,
+  }
+}
+
 function splitSentences(text: string) {
   return text.split(/(?<=[.!?])\s+/)
 }
 
 function AssignmentScene({ answer, register }: { answer: AssignmentAnswer; register: (node: HTMLElement | null) => void }) {
   const questionGroups = splitQuestion(answer.question)
+  const typography = questionTypography(answer.question)
   const rationaleSentences = splitSentences(answer.rationale)
   return <article
     className={`assignment-scene assignment-scene-${Number(answer.number) % 2 ? 'left' : 'right'}`}
@@ -145,7 +155,7 @@ function AssignmentScene({ answer, register }: { answer: AssignmentAnswer; regis
       <span className="scene-number" aria-hidden="true">{answer.number}</span>
       <div className="scene-question-plane">
         <p className="scene-beat-label">01 / FRAGE</p>
-        <h2 aria-label={answer.question}>{questionGroups.map((group, index) => <span aria-hidden="true" style={{ '--group': index } as React.CSSProperties} key={group}>{group}{index < questionGroups.length - 1 ? ' ' : ''}</span>)}</h2>
+        <h2 className={typography.className} data-longest-word={typography.longestWord} lang="de" aria-label={answer.question}>{questionGroups.map((group, index) => <span aria-hidden="true" style={{ '--group': index } as React.CSSProperties} key={group}>{group}{index < questionGroups.length - 1 ? ' ' : ''}</span>)}</h2>
       </div>
       <section className="scene-position" aria-labelledby={`assignment-position-${answer.number}`}>
         <div><h3 id={`assignment-position-${answer.number}`}>Festlegung</h3><span>02 / 04</span></div>
