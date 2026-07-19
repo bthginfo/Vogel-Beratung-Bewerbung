@@ -87,7 +87,7 @@ export const aiDisclosure = {
   number: '09',
   title: 'Transparenz',
   question: 'Wo und wie habe ich AI eingesetzt?',
-  answer: 'Ich habe AI als Sparringspartner genutzt: zum Straffen der Texte, Prüfen der Drei-Schritt-Struktur und des Zeichenlimits. Positionen, Erfahrungen, Gewichtung und finale Sprache habe ich selbst entschieden und redaktionell verantwortet.',
+  answer: 'Ich habe AI genutzt, um meine selbst formulierten Antworten sprachlich zu glätten und zu verdichten, nicht aber inhaltlich zu verändern. Außerdem kam AI bei der grafischen und technischen Aufbereitung als Web-Storyline und PDF zum Einsatz.',
 }
 
 export const ASSIGNMENT_CHARACTER_LIMIT = 6000
